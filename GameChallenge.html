@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Game 1</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      html {
+        font-size: 10px;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        color: inherit;
+        font-size: 1.4rem;
+      }
+      body {
+        font-family: "Poppins", sans-serif;
+        display: grid;
+        min-height: 100vh;
+        place-items: center;
+        color: #593a2e;
+      }
+      .game-wrapper {
+        min-width: 600px;
+        margin: auto;
+        background-color: #d9ae96;
+        border-radius: 4px;
+        padding: 30px;
+        position: relative;
+      }
+      .message {
+        border: 1px solid #222;
+        display: inline-block;
+        padding: 5px 15px;
+        margin-top: 30px;
+      }
+      .guess {
+        display: flex;
+        align-items: center;
+      }
+      .guessNumber,
+      .check {
+        height: 40px;
+        line-height: 40px;
+        border: 1px solid #aaa;
+
+        box-sizing: border-box;
+        padding: 0 15px;
+      }
+      .guessNumber {
+        border-radius: 4px 0 0 4px;
+        border-right: 0;
+      }
+      .check {
+        background: #bfa75e;
+        border: 0;
+        border-radius: 0 4px 4px 0;
+      }
+      h1 {
+        margin-bottom: 15px;
+        font-size: 3.2rem;
+      }
+      .yourScore {
+        margin-top: 30px;
+      }
+      .yourScore span {
+        font-weight: bold;
+      }
+      .reset {
+        position: absolute;
+        right: 10px;
+        background: white;
+        padding: 5px;
+        border-radius: 4px;
+        top: 10px;
+        cursor: pointer;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+      }
+      .HighScore {
+        margin-top: 30px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="game-wrapper">
+      <h1>Guess the Number</h1>
+      <div class="line"><span></span></div>
+      <div class="reset">Reset</div>
+      <section>
+        <div class="guess">
+          <input
+            type="text"
+            class="guessNumber"
+            placeholder="Enter between 1 and 10"
+          /><input type="button" value="Check" class="check" />
+        </div>
+        <div>
+          <div class="message">No Number Yet!</div>
+          <div class="yourScore">Your Score is <span>10</span></div>
+          <div class="HighScore">HighScore <span>0</span></div>
+        </div>
+      </section>
+    </div>
+  </body>
+  <script>
+    let guess = Math.trunc(Math.random() * 10) + 1;
+
+    let score = 10;
+
+    let HighScore = 0;
+
+    displayMsg = function (msg) {
+      document.querySelector(".message").textContent = msg;
+    };
+
+    displayScore = function (score) {
+      document.querySelector(".yourScore span").textContent = score;
+    };
+
+    document.querySelector(".check").addEventListener("click", function () {
+      const checkValue = Number(document.querySelector(".guessNumber").value);
+      if (score > 0) {
+        if (!checkValue) {
+          displayMsg("Not Enter any value");
+        } else if (checkValue === guess) {
+          displayMsg("You Got the Number !");
+          document.querySelector(".message").style.backgroundColor = "#BFA75E";
+          if (score > HighScore) {
+            HighScore = score;
+            document.querySelector(".HighScore span").textContent = HighScore;
+          }
+        } else if (checkValue > guess) {
+          displayMsg(`It's Higher!`);
+          score--;
+          displayScore(score);
+        } else if (checkValue < guess) {
+          displayMsg(`It's Lower!`);
+          score--;
+          displayScore(score);
+        }
+      }
+    });
+
+    document.querySelector(".reset").addEventListener("click", function () {
+      score = 10;
+      displayScore(score);
+      document.querySelector(".guessNumber").value = "";
+      displayMsg(`No Number Yet!`);
+      document.querySelector(".message").style.backgroundColor = "transparent";
+      guess = Math.trunc(Math.random() * 10) + 1;
+    });
+  </script>
+</html>
